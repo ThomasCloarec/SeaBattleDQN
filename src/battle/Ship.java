@@ -38,6 +38,7 @@ public class Ship {
     public Ship(String name, int size) {
         this.name = name;
         this.size = size;
+        this.direction = Direction.HORIZONTAL;
     }
 
     /**

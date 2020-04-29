@@ -76,8 +76,19 @@ public class BattleShip {
             scanner.useDelimiter(this.DELIMITER);
 
             try {
-                this.width = scanner.nextInt();
-                this.height = scanner.nextInt();
+                int width = scanner.nextInt();
+                if (width <= 0) {
+                    throw new Exception("Width has to be bigger than 0");
+                } else {
+                    this.width = width;
+                }
+
+                int height = scanner.nextInt();
+                if (height <= 0) {
+                    throw new Exception("Height has to be bigger than 0");
+                } else {
+                    this.height = height;
+                }
 
                 if ("mode".equals(scanner.next())) {
                     String modeName = scanner.next();
@@ -96,7 +107,13 @@ public class BattleShip {
                 }
 
                 while (scanner.hasNext()) {
-                    this.fleets.add(new Ship(scanner.next(), scanner.nextInt()));
+                    String shipName = scanner.next();
+                    int shipSize = scanner.nextInt();
+                    if (shipSize <= 0) {
+                        throw new Exception("Ship size has to be bigger than 0");
+                    }
+
+                    this.fleets.add(new Ship(shipName, shipSize));
                 }
             } catch (Exception readingException) {
                 readingException.printStackTrace();
