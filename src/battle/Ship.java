@@ -41,7 +41,7 @@ public class Ship {
     }
 
     /**
-     * Show each field of the ship
+     * Return each field of the ship
      *
      * @return the formatted string
      */

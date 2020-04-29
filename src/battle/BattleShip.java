@@ -54,6 +54,9 @@ public class BattleShip {
         this.printConfiguration();
     }
 
+    /**
+     * Print the configuration of the game (width, height, mode and fleet)
+     */
     public void printConfiguration() {
         System.out.println("Width : " + this.width);
         System.out.println("Height : " + this.height);
