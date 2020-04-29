@@ -1,0 +1,8 @@
+10 : 10:
+mode : HA:
+patrouilleur : 3:
+patrouilleur : 3:
+patrouilleur : 3:
+sous-marin : 2:
+sous-marin : 2:
+remorqueur : 1:
