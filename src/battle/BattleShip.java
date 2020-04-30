@@ -76,6 +76,7 @@ public class BattleShip {
             scanner.useDelimiter(this.DELIMITER);
 
             try {
+                // Check width
                 int width = scanner.nextInt();
                 if (width <= 0) {
                     throw new Exception("Width has to be bigger than 0");
@@ -83,6 +84,7 @@ public class BattleShip {
                     this.width = width;
                 }
 
+                // Check height
                 int height = scanner.nextInt();
                 if (height <= 0) {
                     throw new Exception("Height has to be bigger than 0");
@@ -90,22 +92,27 @@ public class BattleShip {
                     this.height = height;
                 }
 
+                // Check if the mode is valid
                 if ("mode".equals(scanner.next())) {
                     String modeName = scanner.next();
 
                     for (Mode testMode : Mode.values()) {
                         if (testMode.name().equals(modeName)) {
+                            // If the mode is valid, then use it (we could have just "try and catch" a possible error but we should not rely on exceptions to test something like this)
                             this.mode = Mode.valueOf(modeName);
                         }
                     }
 
+                    // If the mode is not valid, then throw an exception
                     if (this.mode == null) {
                         throw new Exception("No valid mode specified");
                     }
                 } else {
+                    // If we did not find the word "mode", then throw an exception
                     throw new Exception("Did not find \"mode\" word on the second line");
                 }
 
+                // Check and insert ships
                 while (scanner.hasNext()) {
                     String shipName = scanner.next();
                     int shipSize = scanner.nextInt();
