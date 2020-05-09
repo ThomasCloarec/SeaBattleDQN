@@ -1,8 +1,9 @@
 package battle;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -15,19 +16,34 @@ import java.util.Scanner;
  *  </ul>
  */
 public class BattleShip {
-    //private Game gamePlay;
     /**
-     * The folder containing config files
+     * The maximum height of the board
      */
-    private static final String DATA_PRE_PATH = "/data/";
+    public static final int BOARD_MAX_HEIGHT = 15;
+    /**
+     * The maximum width of the board
+     */
+    public static final int BOARD_MAX_WIDTH = 15;
+    /**
+     * The minimum height of the board
+     */
+    public static final int BOARD_MIN_HEIGHT = 0;
+    /**
+     * The minimum width of the board
+     */
+    public static final int BOARD_MIN_WIDTH = 0;
     /**
      * The line delimiter for the configuration file
      */
-    private final String DELIMITER = "\\s*:\\s*";
+    private static final String DELIMITER = "\\s*:\\s*";
     /**
      * The ships of the game
      */
-    private final ArrayList<Ship> fleets;
+    private final ArrayList<Ship> fleet = new ArrayList<>();
+    /**
+     * The main logic of the game of battleship
+     */
+    private final Game gamePlay;
     /**
      * The height of the board
      */
@@ -49,19 +65,27 @@ public class BattleShip {
      * @param playerName2 the name of the second player
      */
     public BattleShip(String filename, String playerName1, String playerName2) {
-        this.fleets = new ArrayList<>();
+        // Check parameters
+        if (filename == null || playerName1 == null || playerName2 == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         this.configure(filename);
         this.printConfiguration();
+
+        this.gamePlay = new Game(this.fleet, playerName1, playerName2, this.width, this.height, this.mode);
+        this.gamePlay.start();
     }
 
     /**
      * Print the configuration of the game (width, height, mode and fleet)
      */
     public void printConfiguration() {
+        System.out.println("\n--- CONFIGURATION OF THE GAME ---");
         System.out.println("Width : " + this.width);
         System.out.println("Height : " + this.height);
         System.out.println("Mode : " + this.mode);
-        System.out.println("\nFleet : " + this.fleets);
+        System.out.println("Fleet : " + this.fleet);
     }
 
     /**
@@ -70,63 +94,73 @@ public class BattleShip {
      * @param fileName the name of the file
      */
     private void configure(String fileName) {
-        URL url = BattleShip.class.getResource(BattleShip.DATA_PRE_PATH + fileName);
+        // Check parameters
+        if (fileName == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
 
-        try (Scanner scanner = new Scanner(url.openStream()).useDelimiter(this.DELIMITER)) {
-            scanner.useDelimiter(this.DELIMITER);
+        // Find the complete path to the file
+        URL url = BattleShip.class.getResource(fileName);
 
-            try {
-                // Check width
-                int width = scanner.nextInt();
-                if (width <= 0) {
-                    throw new Exception("Width has to be bigger than 0");
-                } else {
-                    this.width = width;
-                }
+        // Load the file
+        try (Scanner scanner = new Scanner(url.openStream()).useDelimiter(BattleShip.DELIMITER)) {
+            scanner.useDelimiter(BattleShip.DELIMITER);
+
+            // Check width
+            int width = scanner.nextInt();
+            if (width >= BattleShip.BOARD_MIN_WIDTH && width <= BattleShip.BOARD_MAX_WIDTH) {
+                this.width = width;
 
                 // Check height
                 int height = scanner.nextInt();
-                if (height <= 0) {
-                    throw new Exception("Height has to be bigger than 0");
-                } else {
+                if (height >= BattleShip.BOARD_MIN_HEIGHT && height <= BattleShip.BOARD_MAX_HEIGHT) {
                     this.height = height;
-                }
 
-                // Check if the mode is valid
-                if ("mode".equals(scanner.next())) {
-                    String modeName = scanner.next();
+                    // Check if there is a mode
+                    if ("mode".equals(scanner.next().toLowerCase())) {
+                        String modeName = scanner.next();
 
-                    for (Mode testMode : Mode.values()) {
-                        if (testMode.name().equals(modeName)) {
-                            // If the mode is valid, then use it (we could have just "try and catch" a possible error but we should not rely on exceptions to test something like this)
+                        // Check if the mode is valid
+                        if (Mode.contains(modeName)) {
                             this.mode = Mode.valueOf(modeName);
-                        }
-                    }
 
-                    // If the mode is not valid, then throw an exception
-                    if (this.mode == null) {
-                        throw new Exception("No valid mode specified");
+                            // Check and insert ships
+                            boolean validEntry = true;
+                            while (validEntry && scanner.hasNext()) {
+                                String shipName = scanner.next();
+                                int shipSize = scanner.nextInt();
+
+                                if (shipSize >= Ship.MIN_SIZE && shipSize <= Ship.MAX_SIZE) {
+                                    this.fleet.add(new Ship(shipName, shipSize));
+                                } else {
+                                    System.err.println("Ship size has to be bigger than 0");
+                                    validEntry = false;
+                                }
+                            }
+                        } else {
+                            System.err.println("No valid mode specified");
+                        }
+                    } else {
+                        System.err.println("Did not find \"mode\" word on the second line");
                     }
                 } else {
-                    // If we did not find the word "mode", then throw an exception
-                    throw new Exception("Did not find \"mode\" word on the second line");
+                    System.err.println("Height has to be bigger than 0");
                 }
-
-                // Check and insert ships
-                while (scanner.hasNext()) {
-                    String shipName = scanner.next();
-                    int shipSize = scanner.nextInt();
-                    if (shipSize <= 0) {
-                        throw new Exception("Ship size has to be bigger than 0");
-                    }
-
-                    this.fleets.add(new Ship(shipName, shipSize));
-                }
-            } catch (Exception readingException) {
-                readingException.printStackTrace();
+            } else {
+                System.err.println("Width has to be bigger than 0");
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
+        } catch (InputMismatchException e) {
+            System.err.println("The file is not valid. Check this configuration example : \n" +
+                    "\t10 : 15:\n" +
+                    "\tmode : HH:\n" +
+                    "\tporte-avion : 5:\n" +
+                    "\tfregate : 4:\n" +
+                    "\tfregate : 4:\n" +
+                    "\tpatrouilleur : 3:\n" +
+                    "\tsous-marin : 2:\n" +
+                    "\tremorqueur : 1:");
         }
     }
 }
