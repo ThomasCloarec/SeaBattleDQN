@@ -1,4 +1,4 @@
-package battle;
+package battle.game;
 
 /**
  * The interface of a normal game, could be implemented by any kind of game

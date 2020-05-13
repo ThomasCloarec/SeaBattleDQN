@@ -1,7 +1,11 @@
 package battle;
 
-import java.io.IOException;
-import java.net.URL;
+import battle.game.Game;
+import battle.game.Mode;
+import battle.game.ships.Ship;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -99,11 +103,11 @@ public class BattleShip {
             throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
         }
 
-        // Find the complete path to the file
-        URL url = BattleShip.class.getResource(fileName);
+        // Load configuration file
+        File file = new File(fileName);
 
-        // Load the file
-        try (Scanner scanner = new Scanner(url.openStream()).useDelimiter(BattleShip.DELIMITER)) {
+        // Use the file
+        try (Scanner scanner = new Scanner(file).useDelimiter(BattleShip.DELIMITER)) {
             scanner.useDelimiter(BattleShip.DELIMITER);
 
             // Check width
@@ -125,8 +129,7 @@ public class BattleShip {
                             this.mode = Mode.valueOf(modeName);
 
                             // Check and insert ships
-                            boolean validEntry = true;
-                            while (validEntry && scanner.hasNext()) {
+                            while (scanner.hasNext()) {
                                 String shipName = scanner.next();
                                 int shipSize = scanner.nextInt();
 
@@ -134,23 +137,28 @@ public class BattleShip {
                                     this.fleet.add(new Ship(shipName, shipSize));
                                 } else {
                                     System.err.println("Ship size has to be bigger than 0");
-                                    validEntry = false;
+                                    System.exit(1);
                                 }
                             }
                         } else {
                             System.err.println("No valid mode specified");
+                            System.exit(1);
                         }
                     } else {
                         System.err.println("Did not find \"mode\" word on the second line");
+                        System.exit(1);
                     }
                 } else {
                     System.err.println("Height has to be bigger than 0");
+                    System.exit(1);
                 }
             } else {
                 System.err.println("Width has to be bigger than 0");
+                System.exit(1);
             }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.err.println("Fichier non trouvé");
+            System.exit(1);
         } catch (InputMismatchException e) {
             System.err.println("The file is not valid. Check this configuration example : \n" +
                     "\t10 : 15:\n" +
@@ -161,6 +169,7 @@ public class BattleShip {
                     "\tpatrouilleur : 3:\n" +
                     "\tsous-marin : 2:\n" +
                     "\tremorqueur : 1:");
+            System.exit(1);
         }
     }
 }

@@ -1,5 +1,5 @@
 10 : 15:
-mode : HH:
+mode : HA:
 porte-avion : 5:
 fregate : 4:
 fregate : 4:

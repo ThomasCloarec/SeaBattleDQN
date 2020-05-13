@@ -1,5 +1,5 @@
 10 : 10:
-mode : HA:
+mode : AA:
 patrouilleur : 3:
 patrouilleur : 3:
 patrouilleur : 3:

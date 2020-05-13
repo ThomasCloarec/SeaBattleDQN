@@ -1,4 +1,4 @@
-package battle;
+package battle.game;
 
 /**
  * The possible results of a shot :

@@ -1,17 +1,11 @@
-package battle;
+package battle.game.ships;
 
 /**
- * Allowed modes for the game :
- * <ul>
- *     <li>HH (Human - Human)</li>
- *     <li>HA (Human - Auto</li>
- *     <li>AA (Auto - Auto)</li>
- * </ul>
+ * Allowed directions for ships
  */
-public enum Mode {
-    HH,
-    HA,
-    AA;
+public enum Direction {
+    HORIZONTAL,
+    VERTICAL;
 
     /**
      * Test if a string correspond to one of the modes
@@ -28,8 +22,8 @@ public enum Mode {
         boolean ret = false;
 
         int i = 0;
-        while (!ret && i < Mode.values().length) {
-            ret = Mode.values()[i].name().equals(testMode);
+        while (!ret && i < Direction.values().length) {
+            ret = Direction.values()[i].name().equals(testMode);
             i++;
         }
 

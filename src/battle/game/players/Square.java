@@ -1,17 +1,17 @@
-package battle;
+package battle.game.players;
 
 /**
  * The game board is composed of square objects that are defined by the present class.
  */
 public class Square {
     /**
-     * the x position of the square on the board
+     * the line position of the square on the board
      */
-    private final int x;
+    private final int line;
     /**
-     * the x position of the square on the board
+     * the column position of the square on the board
      */
-    private final int y;
+    private final int column;
     /**
      * is the square free
      */
@@ -24,18 +24,18 @@ public class Square {
     /**
      * The constructor of the class Square, initialize free as true and hit as false
      *
-     * @param x the x position of the square on the board
-     * @param y the x position of the square on the board
+     * @param line the x position of the square on the board
+     * @param column the x position of the square on the board
      */
-    public Square(int x, int y) {
-        if (x < 0) {
+    public Square(int line, int column) {
+        if (line < 0) {
             throw new IllegalArgumentException("The x parameter should be a number greater than 0.");
-        } else if (y < 0) {
+        } else if (column < 0) {
             throw new IllegalArgumentException("The y parameter should be a number greater than 0.");
         }
 
-        this.x = x;
-        this.y = y;
+        this.line = line;
+        this.column = column;
         this.free = true;
         this.hit = false;
     }
@@ -64,8 +64,8 @@ public class Square {
         return "Square{" +
                 "free=" + this.free +
                 ", hit=" + this.hit +
-                ", x=" + this.x +
-                ", y=" + this.y +
+                ", x=" + this.line +
+                ", y=" + this.column +
                 '}';
     }
 
@@ -85,5 +85,23 @@ public class Square {
      */
     public boolean isHit() {
         return this.hit;
+    }
+
+    /**
+     * Gets the column position of the square on the board.
+     *
+     * @return Value of the column position of the square on the board.
+     */
+    public int getColumn() {
+        return this.column;
+    }
+
+    /**
+     * Gets the line position of the square on the board.
+     *
+     * @return Value of the line position of the square on the board.
+     */
+    public int getLine() {
+        return this.line;
     }
 }
