@@ -129,6 +129,11 @@ public abstract class Player {
      * @return the ShotResult
      */
     public ShotResult analyzeShot(int[] shot) {
+        // Check parameters
+        if (shot == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         ShotResult shotResult = ShotResult.MISS;
 
         int line = shot[0];
@@ -183,6 +188,11 @@ public abstract class Player {
      * @param shotPosition the position of the shot
      */
     public void sendLastShotResult(ShotResult shotResult, int[] shotPosition) {
+        // Check parameters
+        if (shotResult == null || shotPosition == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         int line = shotPosition[0];
         int column = shotPosition[1];
         this.opponentGrid[line][column].setHit();
@@ -201,6 +211,11 @@ public abstract class Player {
      * @return true if can we insert them on the grid
      */
     protected boolean checkPosition(Square[] squares) {
+        // Check parameters
+        if (squares == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         boolean allowedPosition = true;
         int i = 0;
         while (allowedPosition && i < squares.length) {

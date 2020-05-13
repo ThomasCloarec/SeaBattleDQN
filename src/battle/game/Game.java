@@ -104,6 +104,11 @@ public class Game implements IGame {
      * @return the ShotResult
      */
     public ShotResult analyzeShot(int[] shot) {
+        // Check parameters
+        if (shot == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         ShotResult shotResult = ShotResult.MISS;
         if (this.current == this.player1) {
             shotResult = this.player2.analyzeShot(shot);
@@ -118,6 +123,10 @@ public class Game implements IGame {
     }
 
     public boolean allSunk(Player player) {
+        // Check parameters
+        if (player == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
         return player.allSunk();
     }
 
@@ -128,6 +137,10 @@ public class Game implements IGame {
      * @return the chosen position
      */
     public int[] readShot(Player player) {
+        // Check parameters
+        if (player == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
         return player.newShot();
     }
 

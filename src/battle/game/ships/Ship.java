@@ -7,7 +7,7 @@ public class Ship implements Cloneable {
     /**
      * The maximum size of a ship
      */
-    public static final int MAX_SIZE = 5;
+    public static final int MAX_SIZE = 10;
     /**
      * The minimum size of a ship
      */
@@ -155,6 +155,10 @@ public class Ship implements Cloneable {
      * @param direction New value of The direction of the ship.
      */
     public void setDirection(Direction direction) {
+        // Check parameters
+        if (direction == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
         this.direction = direction;
     }
 
