@@ -48,7 +48,6 @@ public class AutoPlayer extends Player {
      */
     @Override
     public void shipPlacement() {
-        // TODO make smarter by not hitting around ship already sunk
         for (Ship ship : this.fleet) {
             boolean shipAdded = false;
 

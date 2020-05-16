@@ -5,6 +5,7 @@ import battle.game.players.HumanPlayer;
 import battle.game.players.Player;
 import battle.game.players.auto.AutoPlayer;
 import battle.game.ships.Ship;
+import battle.text.AppText;
 
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class Game implements IGame {
                 this.fleet.add(ship.clone());
             }
         } catch (CloneNotSupportedException e) {
-            System.out.println("Can't copy ship");
+            System.err.println("Can't copy ship");
         }
 
         if (mode == Mode.HH) {
@@ -151,13 +152,7 @@ public class Game implements IGame {
      */
     @Override
     public String description() {
-        return "\nThe object of Battleship is to try and sink all of the other player's before they sink all of your ships. " +
-                "\nAll of the other player's ships are somewhere on his/her board.  " +
-                "\nYou try and hit them by calling out the coordinates of one of the squares on the board.  " +
-                "\nThe other player also tries to hit your ships by calling out coordinates.  " +
-                "\nNeither you nor the other player can see the other's board so you must try to guess where they are.  " +
-                "\nEach board in the physical game has two grids:  the lower (horizontal) section for the player's ships and the upper part (vertical during play) for recording the player's guesses." +
-                "\nGOOD LUCK !\n";
+        return AppText.getTextFor("description");
     }
 
     /**
@@ -165,7 +160,7 @@ public class Game implements IGame {
      */
     @Override
     public void start() {
-        System.out.println("--- BEGINNING OF THE GAME ---");
+        System.out.println(AppText.getTextFor("beginning"));
         System.out.println(this.description());
 
         this.player1.displayMygrid();
@@ -202,7 +197,8 @@ public class Game implements IGame {
      */
     @Override
     public void endOfGame() {
-        JOptionPane.showMessageDialog(null, "Well done " + this.current.getName() + ", you won !");
-        System.out.println("Well done " + this.current.getName() + ", you won !");
+        String message = AppText.getTextFor("well_done") + " " + this.current.getName() + ", " + AppText.getTextFor("you_won") + " !";
+        JOptionPane.showMessageDialog(null, message);
+        System.out.println(message);
     }
 }

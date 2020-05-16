@@ -3,6 +3,7 @@ package battle.game.players;
 import battle.BattleShip;
 import battle.game.ShotResult;
 import battle.game.ships.Ship;
+import battle.text.AppText;
 import view.GridTableFrame;
 
 import java.util.ArrayList;
@@ -77,6 +78,24 @@ public abstract class Player {
     }
 
     /**
+     * Get a square on a grid (check its validity)
+     *
+     * @param line   the line of the square
+     * @param column the column of the square
+     * @return the square
+     */
+    protected static Square getSquareOnGrid(Square[][] grid, int line, int column) {
+        Square square = null;
+
+        if (line > 0 && line < grid.length) {
+            if (column > 0 && column < grid[0].length) {
+                square = grid[line][column];
+            }
+        }
+        return square;
+    }
+
+    /**
      * Increment the number of players frames
      */
     private static void incrementPlayersFramesCount() {
@@ -119,7 +138,7 @@ public abstract class Player {
     public void displayMygrid() {
         Player.incrementPlayersFramesCount();
         this.myFrame = new GridTableFrame(this.myGrid);
-        this.myFrame.showIt("[" + this.name + "] My grid", 500 * (Player.playersFramesDisplayed - 1), 0);
+        this.myFrame.showIt("[" + this.name + "] " + AppText.getTextFor("my_grid"), 500 * (Player.playersFramesDisplayed - 1), 0);
     }
 
     /**
@@ -161,7 +180,7 @@ public abstract class Player {
      */
     public void displayOpponentGrid() {
         this.opponentFrame = new GridTableFrame(this.opponentGrid);
-        this.opponentFrame.showIt("[" + this.name + "] Opponent grid", 500 * (Player.playersFramesDisplayed - 1), 500);
+        this.opponentFrame.showIt("[" + this.name + "] " + AppText.getTextFor("opponent_grid"), 500 * (Player.playersFramesDisplayed - 1), 500);
     }
 
     /**
@@ -243,7 +262,7 @@ public abstract class Player {
                 this.fleet.add(ship.clone());
             }
         } catch (CloneNotSupportedException e) {
-            System.out.println("Can't copy ship");
+            System.err.println("Can't copy ship");
         }
     }
 
@@ -270,7 +289,7 @@ public abstract class Player {
      * @param square the square
      * @return the answer
      */
-    private boolean isSquareAllowingPlacement(Square square) {
+    protected boolean isSquareAllowingPlacement(Square square) {
         // Check parameters
         if (square == null) {
             throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
@@ -346,21 +365,14 @@ public abstract class Player {
     }
 
     /**
-     * Get a square on the grid (check its validity)
+     * Get a square on my grid (check its validity)
      *
      * @param line   the line of the square
      * @param column the column of the square
      * @return the square
      */
     private Square getSquareOnGrid(int line, int column) {
-        Square square = null;
-
-        if (line > 0 && line < this.myGrid.length) {
-            if (column > 0 && column < this.myGrid[0].length) {
-                square = this.myGrid[line][column];
-            }
-        }
-        return square;
+        return Player.getSquareOnGrid(this.myGrid, line, column);
     }
 
     /**

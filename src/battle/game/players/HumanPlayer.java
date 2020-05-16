@@ -2,6 +2,7 @@ package battle.game.players;
 
 import battle.game.ships.Direction;
 import battle.game.ships.Ship;
+import battle.text.AppText;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -118,7 +119,7 @@ public class HumanPlayer extends Player {
         // Keep asking the user the file to use until he gives it or asks to cancel
         String path = null;
         while (path == null) {
-            int fileChooserValue = jFileChooser.showDialog(null, "Open the " + this.name + " configuration");
+            int fileChooserValue = jFileChooser.showDialog(null, AppText.getTextFor("open_the") + " " + this.name + " configuration");
             if (fileChooserValue == JFileChooser.APPROVE_OPTION) {
                 path = jFileChooser.getSelectedFile().getAbsolutePath();
             } else if (fileChooserValue == JFileChooser.CANCEL_OPTION) {
@@ -374,8 +375,8 @@ public class HumanPlayer extends Player {
         Predicate<Integer> validCondition = integer -> integer >= 0 && integer < this.opponentGrid.length;
         Predicate<Integer> validColumnCondition = integer -> integer >= 0 && integer < this.opponentGrid[0].length;
 
-        int line = this.askInteger("[" + this.name + "] What is the line position where you want to shoot ?", "Chosen line out of range !", validCondition);
-        int column = this.askInteger("[" + this.name + "] What is the column position where you want to shoot ?", "Chosen column out of range !", validColumnCondition);
+        int line = this.askInteger("[" + this.name + "] " + AppText.getTextFor("line_position_question"), AppText.getTextFor("error_line_range"), validCondition);
+        int column = this.askInteger("[" + this.name + "] " + AppText.getTextFor("column_position_question"), AppText.getTextFor("error_column_range"), validColumnCondition);
 
         return new int[]{line, column};
     }

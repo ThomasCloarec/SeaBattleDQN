@@ -1,4 +1,5 @@
 import battle.BattleShip;
+import battle.text.AppText;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -51,7 +52,7 @@ public class LaunchBattle {
 
             // Keep asking the user the file to use until he gives it or asks to cancel
             while (path == null) {
-                int fileChooserValue = jFileChooser.showDialog(null, "Open the battleship configuration");
+                int fileChooserValue = jFileChooser.showDialog(null, AppText.getTextFor("open_battleship_config"));
                 if (fileChooserValue == JFileChooser.APPROVE_OPTION) {
                     path = jFileChooser.getSelectedFile().getAbsolutePath();
                 } else if (fileChooserValue == JFileChooser.CANCEL_OPTION) {
@@ -65,8 +66,8 @@ public class LaunchBattle {
             playerName1 = args[1];
             playerName2 = args[2];
         } else {
-            playerName1 = "Player 1";
-            playerName2 = "Player 2";
+            playerName1 = AppText.getTextFor("player") + " 1";
+            playerName2 = AppText.getTextFor("player") + " 2";
         }
 
         new BattleShip(path, playerName1, playerName2);

@@ -1,5 +1,7 @@
 package battle.game.ships;
 
+import battle.text.AppText;
+
 /**
  * Represent a ship and its position
  */
@@ -13,10 +15,6 @@ public class Ship implements Cloneable {
      */
     public static final int MIN_SIZE = 1;
     /**
-     * The direction of the ship
-     */
-    private Direction direction;
-    /**
      * The name of the ship
      */
     private final String name;
@@ -28,6 +26,10 @@ public class Ship implements Cloneable {
      * The column origin of the ship (horizontal axis)
      */
     private int columnOrigin;
+    /**
+     * The direction of the ship
+     */
+    private Direction direction;
     /**
      * The number of hits received by the ship
      */
@@ -103,14 +105,45 @@ public class Ship implements Cloneable {
      */
     @Override
     public String toString() {
-        return "Ship{" +
-                "name='" + this.name + '\'' +
-                ", size=" + this.size +
-                ", hitNumber=" + this.hitNumber +
+        return AppText.getTextFor("ship") + "{" +
+                AppText.getTextFor("name") + "='" + this.name + "', " +
+                AppText.getTextFor("size") + "=" + this.size + ", " +
+                AppText.getTextFor("hit_number") + "=" + this.hitNumber +
                 ", xOrigin=" + this.lineOrigin +
                 ", yOrigin=" + this.columnOrigin +
                 ", direction=" + this.direction +
                 "}";
+    }
+
+    /**
+     * Sets new The column origin of the ship horizontal axis.
+     *
+     * @param columnOrigin New value of The column origin of the ship horizontal axis.
+     */
+    public void setColumnOrigin(int columnOrigin) {
+        this.columnOrigin = columnOrigin;
+    }
+
+    /**
+     * Sets new The direction of the ship.
+     *
+     * @param direction New value of The direction of the ship.
+     */
+    public void setDirection(Direction direction) {
+        // Check parameters
+        if (direction == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+        this.direction = direction;
+    }
+
+    /**
+     * Sets new The line origin of the ship vertical axis.
+     *
+     * @param lineOrigin New value of The line origin of the ship vertical axis.
+     */
+    public void setLineOrigin(int lineOrigin) {
+        this.lineOrigin = lineOrigin;
     }
 
     /**
@@ -147,36 +180,5 @@ public class Ship implements Cloneable {
      */
     public boolean isSunk() {
         return this.size <= this.hitNumber;
-    }
-
-    /**
-     * Sets new The direction of the ship.
-     *
-     * @param direction New value of The direction of the ship.
-     */
-    public void setDirection(Direction direction) {
-        // Check parameters
-        if (direction == null) {
-            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
-        }
-        this.direction = direction;
-    }
-
-    /**
-     * Sets new The column origin of the ship horizontal axis.
-     *
-     * @param columnOrigin New value of The column origin of the ship horizontal axis.
-     */
-    public void setColumnOrigin(int columnOrigin) {
-        this.columnOrigin = columnOrigin;
-    }
-
-    /**
-     * Sets new The line origin of the ship vertical axis.
-     *
-     * @param lineOrigin New value of The line origin of the ship vertical axis.
-     */
-    public void setLineOrigin(int lineOrigin) {
-        this.lineOrigin = lineOrigin;
     }
 }

@@ -3,6 +3,7 @@ package battle;
 import battle.game.Game;
 import battle.game.Mode;
 import battle.game.ships.Ship;
+import battle.text.AppText;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,11 +86,11 @@ public class BattleShip {
      * Print the configuration of the game (width, height, mode and fleet)
      */
     public void printConfiguration() {
-        System.out.println("\n--- CONFIGURATION OF THE GAME ---");
-        System.out.println("Width : " + this.width);
-        System.out.println("Height : " + this.height);
+        System.out.println(AppText.getTextFor("game_configuration"));
+        System.out.println(AppText.getTextFor("width") + " : " + this.width);
+        System.out.println(AppText.getTextFor("height") + " : " + this.height);
         System.out.println("Mode : " + this.mode);
-        System.out.println("Fleet : " + this.fleet);
+        System.out.println(AppText.getTextFor("fleet") + " : " + this.fleet);
     }
 
     /**
