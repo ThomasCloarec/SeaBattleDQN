@@ -4,6 +4,7 @@ import battle.BattleShip;
 import battle.game.players.HumanPlayer;
 import battle.game.players.Player;
 import battle.game.players.auto.AutoPlayer;
+import battle.game.players.auto.SmartAutoPlayer;
 import battle.game.ships.Ship;
 import battle.text.AppText;
 
@@ -74,10 +75,10 @@ public class Game implements IGame {
             this.player2 = new HumanPlayer(this.fleet, playerName2, width, height);
         } else if (mode == Mode.HA) {
             this.player1 = new HumanPlayer(this.fleet, playerName1, width, height);
-            this.player2 = new AutoPlayer(this.fleet, playerName2, width, height);
+            this.player2 = new AutoPlayer(this.fleet, "Programmed AI player", width, height);
         } else if (mode == Mode.AA) {
-            this.player1 = new AutoPlayer(this.fleet, playerName1, width, height);
-            this.player2 = new AutoPlayer(this.fleet, playerName2, width, height);
+            this.player1 = new SmartAutoPlayer(this.fleet, "Neural network player", width, height);
+            this.player2 = new AutoPlayer(this.fleet, "Programmed AI player", width, height);
         }
 
         this.mode = mode;
@@ -160,36 +161,55 @@ public class Game implements IGame {
      */
     @Override
     public void start() {
+        double value = 10000d;
+        double gameWonCount = 0;
         System.out.println(AppText.getTextFor("beginning"));
         System.out.println(this.description());
+        int iterationCount = this.mode == Mode.AA ? Integer.MAX_VALUE : 1;
+        for (int i = 0; i < iterationCount; i++) {
+            this.player1.initializeGrids();
+            this.player2.initializeGrids();
 
-        this.player1.displayMygrid();
-        this.player1.displayOpponentGrid();
-
-        this.player2.displayMygrid();
-        this.player2.displayOpponentGrid();
-
-        boolean gameRunning = true;
-        while (gameRunning) {
-            int[] shot = this.readShot(this.current);
-            ShotResult shotResult = this.analyzeShot(shot);
-            this.current.sendLastShotResult(shotResult, shot);
-
-            this.changeCurrent();
-            gameRunning = !this.allSunk(this.current);
-
-            // Slow done the game if two AIs are fighting
-            if (this.mode == Mode.AA) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            if (i % value == 0) {
+                System.out.println((gameWonCount / value) * 100 + "% of games won by the neural network over the programmed IA");
+//                this.player1.displayMygrid();
+//                this.player1.displayOpponentGrid();
+//                this.player2.displayMygrid();
+//                this.player2.displayOpponentGrid();
             }
-        }
 
-        this.changeCurrent();
-        this.endOfGame();
+            boolean gameRunning = true;
+            while (gameRunning) {
+                int[] shot = this.readShot(this.current);
+                ShotResult shotResult = this.analyzeShot(shot);
+                this.current.sendLastShotResult(shotResult, shot);
+                this.changeCurrent();
+                gameRunning = !this.allSunk(this.current);
+
+//                if (i % value == 0) {
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+            }
+
+            if (this.current == this.player2) {
+                gameWonCount++;
+            }
+
+            if (i % value == 0) {
+                gameWonCount = 0;
+//                this.player1.closeGrids();
+//                this.player2.closeGrids();
+            }
+
+            this.player1.gameEnded();
+            this.player2.gameEnded();
+            this.changeCurrent();
+            //this.endOfGame();
+        }
     }
 
     /**

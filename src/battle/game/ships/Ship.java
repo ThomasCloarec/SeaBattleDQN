@@ -58,6 +58,13 @@ public class Ship implements Cloneable {
     }
 
     /**
+     * Reset the hit number
+     */
+    public void resetHitNumber() {
+        this.hitNumber = 0;
+    }
+
+    /**
      * This method allows to check if the ship is on a particular square
      *
      * @param line   the line of the square to check
@@ -144,6 +151,15 @@ public class Ship implements Cloneable {
      */
     public void setLineOrigin(int lineOrigin) {
         this.lineOrigin = lineOrigin;
+    }
+
+    /**
+     * Get the number of hits the ship received
+     *
+     * @return the hit number
+     */
+    public int getHitNumber() {
+        return this.hitNumber;
     }
 
     /**

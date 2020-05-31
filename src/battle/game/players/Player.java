@@ -87,8 +87,8 @@ public abstract class Player {
     protected static Square getSquareOnGrid(Square[][] grid, int line, int column) {
         Square square = null;
 
-        if (line > 0 && line < grid.length) {
-            if (column > 0 && column < grid[0].length) {
+        if (line >= 0 && line < grid.length) {
+            if (column >= 0 && column < grid[0].length) {
                 square = grid[line][column];
             }
         }
@@ -100,6 +100,13 @@ public abstract class Player {
      */
     private static void incrementPlayersFramesCount() {
         Player.playersFramesDisplayed++;
+    }
+
+    /**
+     * Decrement the number of players frames
+     */
+    private static void decrementPlayersFramesCount() {
+        Player.playersFramesDisplayed--;
     }
 
     /**
@@ -132,6 +139,12 @@ public abstract class Player {
      */
     public abstract void shipPlacement();
 
+    public void initializeGrids() {
+        Player.initializeGrid(this.myGrid);
+        this.shipPlacement();
+        Player.initializeGrid(this.opponentGrid);
+    }
+
     /**
      * Display the grid of the actual player
      */
@@ -139,6 +152,21 @@ public abstract class Player {
         Player.incrementPlayersFramesCount();
         this.myFrame = new GridTableFrame(this.myGrid);
         this.myFrame.showIt("[" + this.name + "] " + AppText.getTextFor("my_grid"), 500 * (Player.playersFramesDisplayed - 1), 0);
+    }
+
+    /**
+     * Close grids to save calculation performance (used in AA mode)
+     */
+    public void closeGrids() {
+        if (this.myFrame != null) {
+            this.myFrame.dispose();
+            this.myFrame = null;
+        }
+        if (this.opponentFrame != null) {
+            this.opponentFrame.dispose();
+            this.opponentFrame = null;
+        }
+        Player.decrementPlayersFramesCount();
     }
 
     /**
@@ -169,8 +197,10 @@ public abstract class Player {
         }
 
         this.myGrid[line][column].setHit();
-        this.myFrame.revalidate();
-        this.myFrame.repaint();
+        if (this.myFrame != null) {
+            this.myFrame.revalidate();
+            this.myFrame.repaint();
+        }
 
         return shotResult;
     }
@@ -219,8 +249,14 @@ public abstract class Player {
             this.opponentGrid[line][column].setBusy();
         }
 
-        this.opponentFrame.revalidate();
-        this.opponentFrame.repaint();
+        if (this.opponentFrame != null) {
+            this.opponentFrame.revalidate();
+            this.opponentFrame.repaint();
+        }
+    }
+
+    public void gameEnded() {
+
     }
 
     /**
@@ -413,6 +449,19 @@ public abstract class Player {
         }
 
         return ship;
+    }
+
+    /**
+     * Get the number of hits received across all ships
+     *
+     * @return the number of hits
+     */
+    public int getAllHitNumber() {
+        int value = 0;
+        for (Ship ship : this.fleet) {
+            value += ship.getHitNumber();
+        }
+        return value;
     }
 
     /**

@@ -49,6 +49,7 @@ public class AutoPlayer extends Player {
     @Override
     public void shipPlacement() {
         for (Ship ship : this.fleet) {
+            ship.resetHitNumber();
             boolean shipAdded = false;
 
             while (!shipAdded) {
