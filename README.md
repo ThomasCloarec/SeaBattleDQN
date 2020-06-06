@@ -1,15 +1,17 @@
-###Exécution du projet :
+Mini-projet de fin d'année. Deep Q Network pour le mode IA vs IA.
+
+### Exécution du projet :
     Pour lancer l'exécution du projet, il suffit de taper la commande "java -jar battle_thomasCloarec.jar"
     à l'emplacement de l'archive jar (qui est normalement le même que celui de ce README.txt).
 
-###Placement des répertoires de données :
+### Placement des répertoires de données :
     Quand vous aurez exécuté la commande indiqué ci-dessous, le logiciel vous demandera la localisation des fichiers de configuration.
     Ces fichiers se trouvent dans le répertoire data (lui-même divisé en trois répertoires (ai_ai, humain_ai et human_human) selon le mode voulu.
     Le premier fichier demandé par le système est le fichier de jeu, c'est celui finissant par "game.txt".
     Ensuite selon le mode vous avez un certain nombre de fichiers joueurs à sélectionner (en ai_ai : 0, human_ai : 1, human_human : 2).
     Les fichiers de configuration des joueurs humains sont nommés tels "human1.txt", "human2.txt", etc.
 
-###Explications du mode IA contre IA :
+### Explications du mode IA contre IA :
     Ce mode est principalement utilisé afin d'entraîner un réseau de neurones (un approximateur de fonction) utilisant l'apprentissage par renforcement (essai/erreur -> récompense) pour le mode humain contre IA.
     L'entraînement se fait grâce à un joueur pré-programmé dont le but est de jouer de façon relativement bête,
     c'est à dire que le seul élément auquel il fait attention est de ne pas retaper deux fois au même endroit.
@@ -39,15 +41,15 @@
     ~ 6 minutes d'entrainement et 310 000 parties jouées : 95.82% of games won by the neural network over the programmed IA
     A NOTER : Le temps d'entrainement indiqué ci-dessus prend en compte l'affichage d'une partie / 5000 (cela constitue la majorité du temps indiqué).
 
-###Explications du mode Humain VS IA :
+### Explications du mode Humain VS IA :
     Ce mode utilise simplement un fichier sérializé ("trained_nn.ser" embarqué dans le jar) contenant un réseau de neurones pré-entrainé.
 
-###Limites du projet :
+### Limites du projet :
     Il aurait été intéressant de voir ce que le réseau de neurones aurait pu apprendre
     en utilisant une plus grande puissance de calcul (bien que cette "démo" en 4x4
     démontre tout de même son bon fonctionnement). Mon implémentation est proche d'un DQN (Deep Q Network) 
     qui est une technique assez "ancienne" d'apprentissage par renforcement profond (utilisant des réseaux de neurones).
     Elle a le mérite d'être assez "simple" mais elle date maintenant de quelques années.
     
-##Autres :
+## Autres :
     J'ai également implémenté une prise en charge multilingue du jeu grâce aux RessourceBundle et aux fichiers ".properties" (voir package battle.text)
