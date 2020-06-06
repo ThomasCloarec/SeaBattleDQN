@@ -4,7 +4,13 @@ package battle.game.ships;
  * Allowed directions for ships
  */
 public enum Direction {
+    /**
+     * Horizontal direction.
+     */
     HORIZONTAL,
+    /**
+     * Vertical direction.
+     */
     VERTICAL;
 
     /**

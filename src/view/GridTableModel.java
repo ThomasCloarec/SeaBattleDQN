@@ -5,15 +5,47 @@ import battle.game.players.Square;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * The type Grid table model.
+ */
 public class GridTableModel extends AbstractTableModel {
+    /**
+     * The constant PATH.
+     */
     private static final String PATH = "/rss/";
+    /**
+     * The Grid.
+     */
     private Square[][] grid;
+    /**
+     * The Image busy.
+     */
     private String imageBusy = "busy.png";
+    /**
+     * The Image busy and hit.
+     */
     private String imageBusyAndHit = "busyHit.png";
+    /**
+     * The Image free.
+     */
     private String imageFree = "free.png";
+    /**
+     * The Image hit and free.
+     */
     private String imageHitAndFree = "freeHit.png";
-    private int noOfRows, noOfCols;
+    /**
+     * The No of rows.
+     */
+    private int noOfRows, /**
+     * The No of cols.
+     */
+    noOfCols;
 
+    /**
+     * Instantiates a new Grid table model.
+     *
+     * @param grid the grid
+     */
     /*
      * Constructor
      * @param grid : the table to display
@@ -26,14 +58,31 @@ public class GridTableModel extends AbstractTableModel {
 
     // Implementing the tree abstract methods:
 
+    /**
+     * Gets row count.
+     *
+     * @return the row count
+     */
     public int getRowCount() {
         return (noOfRows);
     }
 
+    /**
+     * Gets column count.
+     *
+     * @return the column count
+     */
     public int getColumnCount() {
         return (noOfCols);
     }
 
+    /**
+     * Gets value at.
+     *
+     * @param r the r
+     * @param c the c
+     * @return the value at
+     */
     public Object getValueAt(int r, int c) {
         Object result = new Object();
         Square sq = grid[r][c];

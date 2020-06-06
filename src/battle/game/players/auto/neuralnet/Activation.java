@@ -3,73 +3,37 @@ package battle.game.players.auto.neuralnet;
 import battle.game.players.auto.neuralnet.math.Function;
 import battle.game.players.auto.neuralnet.math.Vector;
 
-public class Activation {
+import java.io.Serializable;
 
-    private final String name;
-    private Function fn;
-    private Function dFn;
-
-    public Activation(String name) {
-        this.name = name;
-    }
-
-    public Activation(String name, Function fn, Function dFn) {
-        this.name = name;
-        this.fn = fn;
-        this.dFn = dFn;
-    }
-
-    // For most activation function it suffice to map each separate element. 
-    // I.e. they depend only on the single component in the vector.
-    public Vector fn(Vector in) {
-        return in.map(this.fn);
-    }
-
-    public Vector dFn(Vector out) {
-        return out.map(this.dFn);
-    }
-
-    // Also when calculating the Error change rate in terms of the input (dCdI)
-    // it is just a matter of multiplying, i.e. ∂C/∂I = ∂C/∂O * ∂O/∂I.
-    public Vector dCdI(Vector out, Vector dCdO) {
-        return dCdO.elementProduct(this.dFn(out));
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-
-    // --------------------------------------------------------------------------
-    // --- A few predefined ones ------------------------------------------------
-    // --------------------------------------------------------------------------
-    // The simple properties of most activation functions as stated above makes
-    // it easy to create the majority of them by just providing lambdas for
-    // fn and the diff dfn.
-
-    public static final Activation Leaky_ReLU = new Activation(
-            "Leaky_ReLU",
-            x -> x <= 0 ? 0.01 * x : x,         // fn
-            x -> x <= 0 ? 0.01 : 1              // dFn
-    );
-
+/**
+ * The type Activation.
+ */
+public class Activation implements Serializable {
+    /**
+     * The constant Identity.
+     */
     public static final Activation Identity = new Activation(
             "Identity",
             x -> x,                             // fn
             x -> 1                              // dFn
     );
-
-
-    // --------------------------------------------------------------------------
-    // Softmax needs a little extra love since element output depends on more
-    // than one component of the vector. Simple element mapping will not suffice.
-    // --------------------------------------------------------------------------
+    /**
+     * The constant Leaky_ReLU.
+     */
+    public static final Activation Leaky_ReLU = new Activation(
+            "Leaky_ReLU",
+            x -> x <= 0 ? 0.01 * x : x,         // fn
+            x -> x <= 0 ? 0.01 : 1              // dFn
+    );
+    /**
+     * The constant Softmax.
+     */
     public static final Activation Softmax = new Activation("Softmax") {
         @Override
         public Vector fn(Vector in) {
             double[] data = in.getData();
             double sum = 0;
-            double max = in.max();    // Trick: translate the input by largest element to avoid overflow.
+            double max = in.max();
             for (double a : data)
                 sum += StrictMath.exp(a - max);
 
@@ -84,5 +48,78 @@ public class Activation {
             return out.elementProduct(sub);
         }
     };
+    /**
+     * The Name.
+     */
+    private final String name;
+    /**
+     * The D fn.
+     */
+    private Function dFn;
+    /**
+     * The Fn.
+     */
+    private Function fn;
 
+    /**
+     * Instantiates a new Activation.
+     *
+     * @param name the name
+     */
+    public Activation(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Instantiates a new Activation.
+     *
+     * @param name the name
+     * @param fn   the fn
+     * @param dFn  the d fn
+     */
+    public Activation(String name, Function fn, Function dFn) {
+        this.name = name;
+        this.fn = fn;
+        this.dFn = dFn;
+    }
+
+    /**
+     * Fn vector.
+     *
+     * @param in the in
+     * @return the vector
+     */
+    public Vector fn(Vector in) {
+        return in.map(this.fn);
+    }
+
+    /**
+     * D fn vector.
+     *
+     * @param out the out
+     * @return the vector
+     */
+    public Vector dFn(Vector out) {
+        return out.map(this.dFn);
+    }
+
+    /**
+     * D cd i vector.
+     *
+     * @param out  the out
+     * @param dCdO the d cd o
+     * @return the vector
+     */
+    public Vector dCdI(Vector out, Vector dCdO) {
+        return dCdO.elementProduct(this.dFn(out));
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return this.name;
+    }
 }

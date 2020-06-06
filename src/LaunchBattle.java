@@ -5,6 +5,9 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
+/**
+ * The type Launch battle.
+ */
 public class LaunchBattle {
     /**
      * Create game instances

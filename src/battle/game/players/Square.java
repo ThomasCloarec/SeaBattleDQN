@@ -24,7 +24,7 @@ public class Square {
     /**
      * The constructor of the class Square, initialize free as true and hit as false
      *
-     * @param line the x position of the square on the board
+     * @param line   the x position of the square on the board
      * @param column the x position of the square on the board
      */
     public Square(int line, int column) {

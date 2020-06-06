@@ -1,0 +1,2 @@
+patrouilleur : 1:1:HORIZONTAL:
+sous-marin : 3:0:HORIZONTAL:

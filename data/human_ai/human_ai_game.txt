@@ -1,0 +1,4 @@
+4: 4:
+mode : HA:
+patrouilleur : 3:
+sous-marin : 2:

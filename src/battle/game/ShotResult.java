@@ -9,7 +9,16 @@ package battle.game;
  * </ul>
  */
 public enum ShotResult {
+    /**
+     * Miss shot result.
+     */
     MISS,
+    /**
+     * Hit shot result.
+     */
     HIT,
+    /**
+     * Sunk shot result.
+     */
     SUNK
 }

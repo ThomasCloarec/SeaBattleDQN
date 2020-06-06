@@ -9,8 +9,17 @@ package battle.game;
  * </ul>
  */
 public enum Mode {
+    /**
+     * Hh mode.
+     */
     HH,
+    /**
+     * Ha mode.
+     */
     HA,
+    /**
+     * Aa mode.
+     */
     AA;
 
     /**

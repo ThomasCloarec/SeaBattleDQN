@@ -6,6 +6,9 @@ import java.util.ResourceBundle;
  * Utility class used for internationalization
  */
 public final class AppText {
+    /**
+     * The constant text.
+     */
     private static final ResourceBundle text = ResourceBundle.getBundle("battle/text/TextLabels");
 
     /**
@@ -17,6 +20,7 @@ public final class AppText {
 
     /**
      * Check if the app has a text for a particular key
+     *
      * @param key the key to check
      * @return if the key exists in the resource bundle
      */
@@ -26,6 +30,7 @@ public final class AppText {
 
     /**
      * Get the text for a particular key
+     *
      * @param key the key of the text
      * @return the text in the right language
      */

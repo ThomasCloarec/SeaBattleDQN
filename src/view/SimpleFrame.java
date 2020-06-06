@@ -6,6 +6,9 @@ import javax.swing.JFrame;
  * SimpleFrame permet d'avoir les methodes de gestion de la fenetre
  */
 public class SimpleFrame extends JFrame {
+    /**
+     * Instantiates a new Simple frame.
+     */
     public SimpleFrame() {
         this.setLocation(200, 200);
         // pour quitter l'application quand on ferme la fenetre
@@ -16,23 +19,7 @@ public class SimpleFrame extends JFrame {
      * Makes the frame visible.
      */
     public void showIt() {
-        this.pack();
         this.setVisible(true);
-    }
-
-    /**
-     * Makes the frame visible and sets the title text.
-     *
-     * @param title : the title of the window
-     */
-    public void showIt(String title) {
-        if (title != null) {
-            this.setTitle(title);
-            this.pack();
-            this.setVisible(true);
-        } else {
-            System.out.println("showIt: title cannot be null");
-        }
     }
 
     /**
@@ -47,7 +34,6 @@ public class SimpleFrame extends JFrame {
         if ((title != null) && (x >= 0) && (y >= 0)) {
             this.setTitle(title);
             this.setLocation(x, y);
-            this.pack();
             this.setVisible(true);
         } else {
             System.out.println("showIt : invalid parameters");

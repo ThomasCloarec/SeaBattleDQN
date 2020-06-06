@@ -1,0 +1,2 @@
+patrouilleur : 3:0:HORIZONTAL:
+sous-marin : 0:2:VERTICAL:

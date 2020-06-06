@@ -1,27 +1,52 @@
 package battle.game.players.auto.neuralnet.math;
 
-
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Careful: not immutable. Most matrix operations are made on same object.
  */
-public class Matrix {
-
-    private final double[][] data;
-    private final int rows;
+public class Matrix implements Serializable {
+    /**
+     * The Cols.
+     */
     private final int cols;
+    /**
+     * The Data.
+     */
+    private final double[][] data;
+    /**
+     * The Rows.
+     */
+    private final int rows;
 
+    /**
+     * Instantiates a new Matrix.
+     *
+     * @param data the data
+     */
     public Matrix(double[][] data) {
         this.data = data;
         this.rows = data.length;
         this.cols = data[0].length;
     }
 
+    /**
+     * Instantiates a new Matrix.
+     *
+     * @param rows the rows
+     * @param cols the cols
+     */
     public Matrix(int rows, int cols) {
         this(new double[rows][cols]);
     }
 
+    /**
+     * Multiply vector.
+     *
+     * @param v the v
+     * @return the vector
+     */
     public Vector multiply(Vector v) {
         double[] out = new double[this.rows];
         for (int y = 0; y < this.rows; y++)
@@ -30,6 +55,12 @@ public class Matrix {
         return new Vector(out);
     }
 
+    /**
+     * Map matrix.
+     *
+     * @param fn the fn
+     * @return the matrix
+     */
     public Matrix map(Function fn) {
         for (int y = 0; y < this.rows; y++)
             for (int x = 0; x < this.cols; x++)
@@ -38,18 +69,39 @@ public class Matrix {
         return this;
     }
 
+    /**
+     * Rows int.
+     *
+     * @return the int
+     */
     public int rows() {
         return this.rows;
     }
 
+    /**
+     * Cols int.
+     *
+     * @return the int
+     */
     public int cols() {
         return this.cols;
     }
 
+    /**
+     * Mul matrix.
+     *
+     * @param scalar the scalar
+     * @return the matrix
+     */
     public Matrix mul(double scalar) {
         return this.map(value -> scalar * value);
     }
 
+    /**
+     * Copy matrix.
+     *
+     * @return the matrix
+     */
     public Matrix copy() {
         Matrix matrix = new Matrix(this.rows, this.cols);
         for (int y = 0; y < this.rows; y++)
@@ -58,10 +110,12 @@ public class Matrix {
         return matrix;
     }
 
-    public double[][] getData() {
-        return this.data;
-    }
-
+    /**
+     * Add matrix.
+     *
+     * @param other the other
+     * @return the matrix
+     */
     public Matrix add(Matrix other) {
         this.assertCorrectDimension(other);
 
@@ -72,6 +126,12 @@ public class Matrix {
         return this;
     }
 
+    /**
+     * Sub matrix.
+     *
+     * @param other the other
+     * @return the matrix
+     */
     public Matrix sub(Matrix other) {
         this.assertCorrectDimension(other);
 
@@ -82,20 +142,44 @@ public class Matrix {
         return this;
     }
 
+    /**
+     * Average double.
+     *
+     * @return the double
+     */
     public double average() {
         return Arrays.stream(this.data).flatMapToDouble(Arrays::stream).average().getAsDouble();
     }
 
+    /**
+     * Variance double.
+     *
+     * @return the double
+     */
     public double variance() {
         double avg = this.average();
         return Arrays.stream(this.data).flatMapToDouble(Arrays::stream).map(a -> (a - avg) * (a - avg)).average().getAsDouble();
     }
 
-    // -------------------------------------------------------------------------
-
+    /**
+     * Assert correct dimension.
+     *
+     * @param other the other
+     */
     private void assertCorrectDimension(Matrix other) {
         if (this.rows != other.rows || this.cols != other.cols)
             throw new IllegalArgumentException(String.format("Matrix of different dim: Input is %d x %d, Vector is %d x %d", this.rows, this.cols, other.rows, other.cols));
+    }
+
+    // -------------------------------------------------------------------------
+
+    /**
+     * Get data double [ ] [ ].
+     *
+     * @return the double [ ] [ ]
+     */
+    public double[][] getData() {
+        return this.data;
     }
 }
 

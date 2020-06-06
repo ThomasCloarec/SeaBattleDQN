@@ -8,32 +8,73 @@ import battle.game.players.auto.neuralnet.math.Vector;
  * Might contain the cost.
  */
 public class Result {
-
-    private final Vector output;
+    /**
+     * The Cost.
+     */
     private final Double cost;
+    /**
+     * The Output.
+     */
+    private final Vector output;
 
+    /**
+     * Instantiates a new Result.
+     *
+     * @param output the output
+     */
     public Result(Vector output) {
+        // Check parameters
+        if (output == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         this.output = output;
         this.cost = null;
     }
 
+    /**
+     * Instantiates a new Result.
+     *
+     * @param output the output
+     * @param cost   the cost
+     */
     public Result(Vector output, double cost) {
+        // Check parameters
+        if (output == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         this.output = output;
         this.cost = cost;
     }
 
-    public Vector getOutput() {
-        return this.output;
-    }
-
-    public Double getCost() {
-        return this.cost;
-    }
-
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return "Result{" + "output=" + this.output +
                 ", cost=" + this.cost +
                 '}';
+    }
+
+    /**
+     * Gets cost.
+     *
+     * @return the cost
+     */
+    public Double getCost() {
+        return this.cost;
+    }
+
+    /**
+     * Gets output.
+     *
+     * @return the output
+     */
+    public Vector getOutput() {
+        return this.output;
     }
 }

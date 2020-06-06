@@ -100,6 +100,12 @@ public class Ship implements Cloneable {
         this.hitNumber++;
     }
 
+    /**
+     * Clone ship.
+     *
+     * @return the ship
+     * @throws CloneNotSupportedException the clone not supported exception
+     */
     @Override
     public Ship clone() throws CloneNotSupportedException {
         return (Ship) super.clone();

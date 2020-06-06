@@ -16,6 +16,10 @@ import java.util.ArrayList;
  */
 public class Game implements IGame {
     /**
+     * The number of games of training between each progress demonstration of the ai
+     */
+    private static final double TRAINING_GAME_NUMBER = 5000.0d;
+    /**
      * The fleet of the game
      */
     private final ArrayList<Ship> fleet = new ArrayList<>();
@@ -75,9 +79,9 @@ public class Game implements IGame {
             this.player2 = new HumanPlayer(this.fleet, playerName2, width, height);
         } else if (mode == Mode.HA) {
             this.player1 = new HumanPlayer(this.fleet, playerName1, width, height);
-            this.player2 = new AutoPlayer(this.fleet, "Programmed AI player", width, height);
+            this.player2 = new SmartAutoPlayer(this.fleet, "Neural Network AI player", width, height, false);
         } else if (mode == Mode.AA) {
-            this.player1 = new SmartAutoPlayer(this.fleet, "Neural network player", width, height);
+            this.player1 = new SmartAutoPlayer(this.fleet, "Neural Network AI player", width, height);
             this.player2 = new AutoPlayer(this.fleet, "Programmed AI player", width, height);
         }
 
@@ -124,6 +128,12 @@ public class Game implements IGame {
         return shotResult;
     }
 
+    /**
+     * All sunk boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public boolean allSunk(Player player) {
         // Check parameters
         if (player == null) {
@@ -147,6 +157,16 @@ public class Game implements IGame {
     }
 
     /**
+     * Display grids.
+     */
+    private void displayGrids() {
+        this.player1.displayMygrid();
+        this.player1.displayOpponentGrid();
+        this.player2.displayMygrid();
+        this.player2.displayOpponentGrid();
+    }
+
+    /**
      * This method gives the description of the game
      *
      * @return the description of the game
@@ -161,21 +181,26 @@ public class Game implements IGame {
      */
     @Override
     public void start() {
-        double value = 10000d;
+        double value = Game.TRAINING_GAME_NUMBER;
         double gameWonCount = 0;
         System.out.println(AppText.getTextFor("beginning"));
         System.out.println(this.description());
         int iterationCount = this.mode == Mode.AA ? Integer.MAX_VALUE : 1;
-        for (int i = 0; i < iterationCount; i++) {
-            this.player1.initializeGrids();
-            this.player2.initializeGrids();
 
-            if (i % value == 0) {
-                System.out.println((gameWonCount / value) * 100 + "% of games won by the neural network over the programmed IA");
-//                this.player1.displayMygrid();
-//                this.player1.displayOpponentGrid();
-//                this.player2.displayMygrid();
-//                this.player2.displayOpponentGrid();
+        if (this.mode != Mode.AA) {
+            this.displayGrids();
+        }
+
+        for (int i = 0; i < iterationCount; i++) {
+            if (this.mode == Mode.AA) {
+                this.player1.initializeGrids();
+                this.player2.initializeGrids();
+
+                if (i % value == 0) {
+                    this.displayGrids();
+                    double winPercentage = (gameWonCount / value) * 100;
+                    System.out.println(winPercentage + "% of games won by the neural network over the programmed IA");
+                }
             }
 
             boolean gameRunning = true;
@@ -186,29 +211,40 @@ public class Game implements IGame {
                 this.changeCurrent();
                 gameRunning = !this.allSunk(this.current);
 
-//                if (i % value == 0) {
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                if (i % value == 0) {
+                    try {
+                        // Pausing between each moves of AIs
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
-            if (this.current == this.player2) {
-                gameWonCount++;
+            if (this.mode == Mode.AA) {
+                if (this.current == this.player2) {
+                    gameWonCount++;
+
+                    if (i % value == 0) {
+                        System.out.println("The neural network WON the last game !");
+                    }
+                } else {
+                    if (i % value == 0) {
+                        System.out.println("The neural network LOOSED the last game !");
+                    }
+                }
             }
 
-            if (i % value == 0) {
+            if (this.mode == Mode.AA && i % value == 0) {
                 gameWonCount = 0;
-//                this.player1.closeGrids();
-//                this.player2.closeGrids();
+                this.player1.closeGrids();
+                this.player2.closeGrids();
             }
 
-            this.player1.gameEnded();
-            this.player2.gameEnded();
             this.changeCurrent();
-            //this.endOfGame();
+            if (this.mode != Mode.AA) {
+                this.endOfGame();
+            }
         }
     }
 

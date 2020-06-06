@@ -80,11 +80,17 @@ public abstract class Player {
     /**
      * Get a square on a grid (check its validity)
      *
+     * @param grid   the grid
      * @param line   the line of the square
      * @param column the column of the square
      * @return the square
      */
     protected static Square getSquareOnGrid(Square[][] grid, int line, int column) {
+        // Check parameters
+        if (grid == null) {
+            throw new IllegalArgumentException("One or more parameter is null. See the concerned method.");
+        }
+
         Square square = null;
 
         if (line >= 0 && line < grid.length) {
@@ -139,6 +145,9 @@ public abstract class Player {
      */
     public abstract void shipPlacement();
 
+    /**
+     * Initialize grids.
+     */
     public void initializeGrids() {
         Player.initializeGrid(this.myGrid);
         this.shipPlacement();
@@ -198,7 +207,6 @@ public abstract class Player {
 
         this.myGrid[line][column].setHit();
         if (this.myFrame != null) {
-            this.myFrame.revalidate();
             this.myFrame.repaint();
         }
 
@@ -250,13 +258,8 @@ public abstract class Player {
         }
 
         if (this.opponentFrame != null) {
-            this.opponentFrame.revalidate();
             this.opponentFrame.repaint();
         }
-    }
-
-    public void gameEnded() {
-
     }
 
     /**

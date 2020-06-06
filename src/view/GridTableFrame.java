@@ -10,6 +10,9 @@ import java.awt.Color;
  * GridTableFrame : frame for GridTable
  */
 public class GridTableFrame extends SimpleFrame {
+    /**
+     * The Row height.
+     */
     private final int rowHeight = 40;  //en pixel
 
     /**
@@ -22,7 +25,7 @@ public class GridTableFrame extends SimpleFrame {
         if (grid != null) {
             // set the grid size
             //repaire les x vers le bas , les Y vers la droite
-            this.setSize(rowHeight * grid[0].length, rowHeight * grid.length);
+            this.setSize(this.rowHeight * grid[0].length, this.rowHeight * grid.length + 60); // +60 is used as the height of the top bar of the JFrame
             // create the model
             GridTableModel otmodel = new GridTableModel(grid);
             JTable tab = new JTable(otmodel);
@@ -31,7 +34,7 @@ public class GridTableFrame extends SimpleFrame {
             // color for the grid lines
             tab.setGridColor(Color.BLUE);
             tab.setBackground(Color.LIGHT_GRAY);
-            tab.setRowHeight(rowHeight);
+            tab.setRowHeight(this.rowHeight);
 
             JScrollPane SP = new JScrollPane(tab);
             this.getContentPane().add(SP);

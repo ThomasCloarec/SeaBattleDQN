@@ -14,25 +14,79 @@ import battle.game.ships.Direction;
 import battle.game.ships.Ship;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
+/**
+ * The type Smart auto player.
+ */
 public class SmartAutoPlayer extends Player {
+    /**
+     * The Neural network.
+     */
     private final NeuralNetwork neuralNetwork;
+    /**
+     * The Total grid size.
+     */
     private final int totalGridSize = this.opponentGrid.length * this.opponentGrid[0].length;
+    /**
+     * The Input layer size.
+     */
     private final int inputLayerSize = this.totalGridSize * 2;
+    /**
+     * The Training.
+     */
+    private boolean training;
 
-    public SmartAutoPlayer(ArrayList<Ship> fleet, String name, int width, int height) {
+    /**
+     * Instantiates a new Smart auto player.
+     *
+     * @param fleet    the fleet
+     * @param name     the name
+     * @param width    the width
+     * @param height   the height
+     * @param training the training
+     */
+    public SmartAutoPlayer(ArrayList<Ship> fleet, String name, int width, int height, boolean training) {
         super(fleet, name, width, height);
+        this.training = training;
 
-        int hiddenLayerSize = (int) Math.sqrt(this.inputLayerSize + this.totalGridSize);
-        this.neuralNetwork =
-                new NeuralNetwork.Builder(this.inputLayerSize)
-                        .addLayer(new Layer(this.totalGridSize, Activation.Softmax))
-                        .addLayer(new Layer(this.totalGridSize, Activation.Softmax))
-                        .setCostFunction(new CostFunction.MSE())
-                        .setOptimizer(new GradientDescent(10))
-                        .initWeights(new Initializer.Random(0, 0.000001))
-                        .create();
+        if (this.training) {
+            this.neuralNetwork =
+                    new NeuralNetwork.Builder(this.inputLayerSize)
+                            .addLayer(new Layer(this.totalGridSize, Activation.Leaky_ReLU))
+                            .addLayer(new Layer(this.totalGridSize, Activation.Softmax))
+                            .setCostFunction(new CostFunction.MSE())
+                            .setOptimizer(new GradientDescent(0.03))
+                            .initWeights(new Initializer.Random(0, 0.000001))
+                            .create();
+        } else {
+            this.neuralNetwork = NeuralNetwork.loadNN();
+        }
+    }
+
+    /**
+     * Instantiates a new Smart auto player.
+     *
+     * @param fleet  the fleet
+     * @param name   the name
+     * @param width  the width
+     * @param height the height
+     */
+    public SmartAutoPlayer(ArrayList<Ship> fleet, String name, int width, int height) {
+        this(fleet, name, width, height, true);
+    }
+
+    /**
+     * Stop training.
+     */
+    public void stopTraining() {
+        this.training = false;
+    }
+
+    /**
+     * Save nn.
+     */
+    public void saveNN() {
+        this.neuralNetwork.saveNN();
     }
 
     /**
@@ -114,23 +168,26 @@ public class SmartAutoPlayer extends Player {
         }
     }
 
+    /**
+     * Send last shot result.
+     *
+     * @param shotResult   the shot result
+     * @param shotPosition the shot position
+     */
     @Override
     public void sendLastShotResult(ShotResult shotResult, int[] shotPosition) {
         super.sendLastShotResult(shotResult, shotPosition);
 
-        double[] expected = new double[this.totalGridSize];
-        if (shotResult == ShotResult.HIT || shotResult == ShotResult.SUNK) {
-            expected[shotPosition[0] * this.opponentGrid[0].length + shotPosition[1]] = 1.0d;
-        } else {
-            expected[shotPosition[0] * this.opponentGrid[0].length + shotPosition[1]] = -1.0d;
+        if (this.training) {
+            double[] expected = new double[this.totalGridSize];
+            if (shotResult == ShotResult.HIT || shotResult == ShotResult.SUNK) {
+                expected[shotPosition[0] * this.opponentGrid[0].length + shotPosition[1]] = 1.0d;
+            } else {
+                expected[shotPosition[0] * this.opponentGrid[0].length + shotPosition[1]] = -1.0d;
+            }
+
+            this.neuralNetwork.learnFrom(new Vector(expected));
+            this.neuralNetwork.updateFromLearning();
         }
-
-        this.neuralNetwork.learnFrom(new Vector(expected));
-        this.neuralNetwork.updateFromLearning();
-    }
-
-    @Override
-    public void gameEnded() {
-        super.gameEnded();
     }
 }
