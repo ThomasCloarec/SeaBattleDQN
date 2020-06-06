@@ -6,7 +6,6 @@ import battle.game.players.auto.neuralnet.optimizer.GradientDescent;
 import battle.game.players.auto.neuralnet.optimizer.Optimizer;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -74,12 +73,10 @@ public final class NeuralNetwork implements Serializable {
      */
     public static NeuralNetwork loadNN() {
         NeuralNetwork neuralNetwork = null;
-        try (FileInputStream inputStream = new FileInputStream(NeuralNetwork.class.getResource("trained_nn.ser").getFile())) {
-            try (ObjectInputStream o = new ObjectInputStream(inputStream)) {
-                neuralNetwork = (NeuralNetwork) o.readObject();
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        try (ObjectInputStream o = new ObjectInputStream(NeuralNetwork.class.getResourceAsStream("/battle/game/players/auto/neuralnet/trained_nn.ser"))) {
+            neuralNetwork = (NeuralNetwork) o.readObject();
+        } catch (IOException | ClassNotFoundException ioException) {
+            ioException.printStackTrace();
         }
 
         return neuralNetwork;
@@ -214,14 +211,8 @@ public final class NeuralNetwork implements Serializable {
          * The Cost function.
          */
         private CostFunction costFunction = new CostFunction.MSE();
-        /**
-         * The Initializer.
-         */
         // defaults:
         private Initializer initializer = new Initializer.Random(-0.5, 0.5);
-        /**
-         * The Optimizer.
-         */
         private Optimizer optimizer = new GradientDescent(0.005);
 
         /**
