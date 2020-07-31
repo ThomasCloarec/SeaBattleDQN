@@ -47,9 +47,7 @@ Mini-projet de fin d'année. Deep Q Network pour le mode IA vs IA.
 ### Limites du projet :
     Il aurait été intéressant de voir ce que le réseau de neurones aurait pu apprendre
     en utilisant une plus grande puissance de calcul (bien que cette "démo" en 4x4
-    démontre tout de même son bon fonctionnement). Mon implémentation est proche d'un DQN (Deep Q Network) 
-    qui est une technique assez "ancienne" d'apprentissage par renforcement profond (utilisant des réseaux de neurones).
-    Elle a le mérite d'être assez "simple" mais elle date maintenant de quelques années.
+    démontre tout de même son bon fonctionnement). Mon implémentation est proche d'un DQN (Deep Q Network, une technique d'apprentissage par renforcement profond).
     
 ## Autres :
     J'ai également implémenté une prise en charge multilingue du jeu grâce aux RessourceBundle et aux fichiers ".properties" (voir package battle.text)
